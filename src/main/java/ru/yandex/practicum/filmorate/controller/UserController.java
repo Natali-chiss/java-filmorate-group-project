@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.FilmResponse;
 import ru.yandex.practicum.filmorate.model.User;
-//import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.RecommendationService;
 import ru.yandex.practicum.filmorate.service.UserServiceImpl;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -21,9 +22,11 @@ public class UserController {
     private static final String FRIENDS_PATH = USER_ID_PATH + "/friends";
     private static final String FRIEND_ID_PATH = FRIENDS_PATH + "/{friendId}";
     private static final String COMMON_FRIENDS_PATH = USER_ID_PATH + "/friends/common/{otherId}";
+    private static final String RECOMMENDATIONS_PATH = USER_ID_PATH + "/recommendations";
 
     private final UserStorage userStorage;
     private final UserServiceImpl userServiceImpl;
+    private final RecommendationService recommendationService;
 
     @GetMapping
     public Collection<User> findAll() {
@@ -64,5 +67,10 @@ public class UserController {
     @GetMapping(FRIENDS_PATH)
     public Set<User> findAllFriends(@Valid @PathVariable("id") Long id) {
         return userServiceImpl.findAllFriends(id);
+    }
+
+    @GetMapping(RECOMMENDATIONS_PATH)
+    public Collection<FilmResponse> getRecommendations(@PathVariable("id") Long id) {
+        return recommendationService.getRecommendations(id);
     }
 }
