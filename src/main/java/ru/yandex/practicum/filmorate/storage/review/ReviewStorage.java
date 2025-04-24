@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Review;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewDao {
+public interface ReviewStorage {
 
     Review create(Review review);
 
@@ -26,5 +26,4 @@ public interface ReviewDao {
     void removeLike(Long reviewId, Long userId);
 
     void removeDislike(Long reviewId, Long userId);
-
 }

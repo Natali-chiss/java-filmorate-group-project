@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class ReviewDaoImpl implements ReviewDao {
+public class ReviewDbStorage implements ReviewStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -51,20 +51,20 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public Optional<Review> findById(Long reviewId) {
-        String sql = "SELECT * FROM reviews WHERE review_id = ?";
+        String sql = "SELECT review_id, content, is_positive, user_id, film_id, useful FROM reviews WHERE review_id = ?";
         List<Review> reviews = jdbcTemplate.query(sql, this::mapRowToReview, reviewId);
         return reviews.isEmpty() ? Optional.empty() : Optional.of(reviews.get(0));
     }
 
     @Override
     public List<Review> findByFilmId(Long filmId, int count) {
-        String sql = "SELECT * FROM reviews WHERE film_id = ? ORDER BY useful DESC LIMIT ?";
+        String sql = "SELECT review_id, content, is_positive, user_id, film_id, useful FROM reviews WHERE film_id = ? ORDER BY useful DESC LIMIT ?";
         return jdbcTemplate.query(sql, this::mapRowToReview, filmId, count);
     }
 
     @Override
     public List<Review> findAll(int count) {
-        String sql = "SELECT * FROM reviews ORDER BY useful DESC LIMIT ?";
+        String sql = "SELECT review_id, content, is_positive, user_id, film_id, useful FROM reviews ORDER BY useful DESC LIMIT ?";
         return jdbcTemplate.query(sql, this::mapRowToReview, count);
     }
 
